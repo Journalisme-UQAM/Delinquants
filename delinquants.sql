@@ -306,4 +306,114 @@ select COUNT(ethnicite), ethnicite
 from delinquants
 group by ethnicite;
 -- la nationalité de chaque délinquants. Je note que 350 délinquants n'ont pas déclaré leur nationalité (ce n'est pas obligatoire)
--- ****voir pour infogr.am 
+
+
+select COUNT(religion), religion
+from delinquants
+group by religion;
+-- la religion de chaque délinquants. Je note que 1460 délinquants n'ont pas déclaré la religion qu'ils pratiquent et 620 ont inscrtit "non déclarée" (ce n'est pas une information obligatoire)
+
+select COUNT(emplacement), emplacement
+from delinquants
+group by emplacement;
+-- type d'installation où la gestion de chaque délinquant est effectuée
+
+select COUNT(emplacement), emplacement, genre 
+from delinquants
+where genre = "femme"
+group by emplacement;
+-- type d'installation selon les femmes
+
+select COUNT(emplacement), emplacement, genre 
+from delinquants
+where genre = "homme"
+group by emplacement;
+-- type d'installation selon les hommes
+
+select COUNT(emplacement), emplacement, groupeethnique
+from delinquants
+where groupeethnique = "autochtone"
+group by emplacement;
+-- type d'installation selon les personnes autchotones
+
+
+select COUNT(besoindynamique), besoindynamique
+from delinquants
+group by besoindynamique;
+-- bsoin d'intervention pour chaque délinquant
+
+
+select COUNT(securitedelinquant), securitedelinquant
+from delinquants
+group by securitedelinquant;
+-- cote de sécurité pour chaque délinquant
+
+select COUNT(securitedelinquant), securitedelinquant, groupeethnique
+from delinquants
+where groupeethnique = "autochtone"
+group by securitedelinquant;
+-- cote de sécurité selon le groupe ethnique (j'ai essayé aussi pour les femmes et les hommes)
+
+select COUNT(securitedelinquant), securitedelinquant, ethnicite
+from delinquants
+where ethnicite = "noir"
+group by securitedelinquant;
+-- cote de sécurité selon la nationalité (j'ai essayé plusieurs nationalités)
+
+
+select risquestatique, COUNT(risquestatique)
+from delinquants
+group by risquestatique;
+-- le niveau de risque de chaque délinquant
+
+select risquestatique, COUNT(risquestatique), genre 
+from delinquants
+where genre = "homme"
+group by risquestatique;
+-- le niveau de risque selon le genre
+
+select risquestatique, COUNT(risquestatique), groupeethnique
+from delinquants
+where groupeethnique = "autochtone"
+group by risquestatique;
+-- le niveau de risque selon le groupeethnique
+
+select COUNT(potentielreinsertion), potentielreinsertion
+from delinquants
+group by potentielreinsertion;
+-- le niveau de potentialité de réinsertion sociale pour chaque délinquant
+
+select COUNT(potentielreinsertion), potentielreinsertion, genre
+from delinquants
+where genre = "homme"
+group by potentielreinsertion;
+-- la possibilité de réinsertion sociale selon le genre
+
+select COUNT(potentielreinsertion), potentielreinsertion, groupeethnique
+from delinquants
+where groupeethnique = "autochtone"
+group by potentielreinsertion;
+-- la possibilité de réinsertion sociale selon le groupeethnique
+
+select COUNT(niveaumotivation), niveaumotivation
+from delinquants
+group by niveaumotivation;
+-- niveau de motivation de chaque délinquant par rapport à son plan correctionnel
+
+
+select COUNT(infraction), infraction
+from delinquants
+group by infraction;
+-- type d'infraction commise pour chaque délinquant
+
+select COUNT(infraction), infraction, genre
+from delinquants
+where genre = "femme"
+group by infraction;
+-- type d'infraction selon le genre
+
+select COUNT(infraction), infraction, groupeethnique
+from delinquants
+where groupeethnique = "autochtone"
+group by infraction;
+-- type d'infraction selon le groupe ethnique 
