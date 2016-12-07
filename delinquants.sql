@@ -19,6 +19,9 @@ from delinquants;
 select distinct securiteetablissement
 from delinquants;
 
+select distinct typesurveillance
+from delinquants;
+
 
 -- Je fais des tests de commandes ici
 
@@ -59,7 +62,12 @@ where genre = "femme";
 select ROUND(AVG(age)), genre
 from delinquants
 where genre = "homme";
--- âge moyen des hommes 
+-- âge moyen des hommes
+
+select ROUND(AVG(age)), genre, incarceration
+from delinquants
+where genre = "femme" and incarceration = "incarcere";
+-- âge moyen pour les hommes et femmes incarcerés (j'ai testé pour les deux sexes) 
 
 
 select COUNT(dureepeine)
@@ -71,26 +79,34 @@ select ROUND(AVG(dureepeine))
 from delinquants;
 -- durée moyenne ceux avec peine de durée déterminée 
 
-select ROUND(AVG(dureepeine)), genre
+select ROUND(AVG(dureepeine)), genre, groupeethnique 
 from delinquants
-where genre = "femme";
--- durée moyenne pour les femems
-
-select ROUND(AVG(dureepeine)), genre
-from delinquants
-where genre = "homme";
--- durée moyenne pour les hommes
+where genre = "homme" and groupeethnique = "non autochtone";
+-- durée moyenne selon le genre et l'origine ethnique (diverses combinaisons testées)
 
 
-select COUNT(groupeethnique)
-from delinquants
-where groupeethnique = "autochtone"; 
--- combien de délinquants sont autochtones
 
-select COUNT(groupeethnique)
+select COUNT(groupeethnique), groupeethnique, 
 from delinquants
-where groupeethnique = "non autochtone"; 
--- combien de délinquants sont non autochtones
+group by groupeethnique;
+-- l'origine ethnique de chaque délinquants
+
+select COUNT(groupeethnique), groupeethnique, genre 
+from delinquants
+where groupeethnique = "non autochtone" and genre = "femme";
+-- Le nombre de délinquants selon l'origine ethnique et le genre (j'ai testé diverses combinaisons)
+
+select COUNT(groupeethnique), groupeethnique, genre, incarceration
+from delinquants
+where groupeethnique = "autochtone" and genre = "homme" and incarceration = "incarcere";
+-- Le nombre de délinquants incarcérés selon l'origine ethnique et le genre (j'ai testé diverses combinaisons)
+
+select COUNT(groupeethnique), groupeethnique, incarceration
+from delinquants
+where groupeethnique = "autochtone" and incarceration = "incarcere";
+-- le nombre de délinquants autochtones incarcérés et sous surveillance 
+
+
 
 select COUNT(genre)
 from delinquants
@@ -102,14 +118,29 @@ from delinquants
 where genre = "homme"; 
 -- combien de délinquants sont des hommes 
 
+select COUNT(genre), incarceration
+from delinquants
+where genre = "homme" and incarceration = "incarcere";
+-- le nombre de femmes et d'hommes incarcérés et sous surveillance (j'ai testé les diverses combinaisons)
+
 
 select MAX(age)
 from delinquants;
 -- le délinquant le plus vieux est âgé de 94 ans
 
+select MAX(age), incarceration
+from delinquants
+where incarceration = "incarcere";
+-- le délinquant incarceré le plus vieux est âgé de 87 ans
+
 select MIN(age)
 from delinquants;
 -- le délinquant le plus jeune est âgé de 18 ans
+
+select MIN(age), incarceration
+from delinquants
+where incarceration = "incarcere";
+-- le délinquant incarcéré le plus jeune est âgé de 18 ans 
 
 select MAX(age), genre
 from delinquants
@@ -152,39 +183,39 @@ where groupeethnique = "non autochtone";
 -- la personne non autochtone la moins âgée
 
 
--- Je fais ci-dessous des statistiques pour les groupes d'âges
+-- Je fais ci-dessous des statistiques pour les groupes d'âges des délinquants incarcérés
  
-select COUNT(age) 
+select COUNT(age), incarceration 
 from delinquants 
-where age <= 29;
+where age <= 29 and incarceration = "incarcere";
 
-select COUNT(age) 
+select COUNT(age), incarceration 
 from delinquants 
-where age BETWEEN 30 and 39;
+where age BETWEEN 30 and 39 and incarceration = "incarcere";
 
-select COUNT(age) 
+select COUNT(age), incarceration 
 from delinquants 
-where age BETWEEN 40 and 49;
+where age BETWEEN 40 and 49 and incarceration = "incarcere";
 
-select COUNT(age) 
+select COUNT(age), incarceration  
 from delinquants 
-where age BETWEEN 50 and 59;
+where age BETWEEN 50 and 59 and incarceration = "incarcere";
 
-select COUNT(age) 
+select COUNT(age), incarceration 
 from delinquants 
-where age BETWEEN 60 and 69;
+where age BETWEEN 60 and 69 and incarceration = "incarcere";
 
-select COUNT(age) 
+select COUNT(age), incarceration 
 from delinquants 
-where age BETWEEN 70 and 79;
+where age BETWEEN 70 and 79 and incarceration = "incarcere";
 
-select COUNT(age) 
+select COUNT(age), incarceration  
 from delinquants 
-where age BETWEEN 80 and 89;
+where age BETWEEN 80 and 89 and incarceration = "incarcere";
 
-select COUNT(age) 
+select COUNT(age), incarceration  
 from delinquants 
-where age >= 90;
+where age >= 90 and incarceration = "incarcere";
 
 
 select COUNT(incarceration), incarceration
@@ -213,30 +244,12 @@ where incarceration = "surveillance" and genre = "homme";
 -- combien d'hommes sont sous surveillance 
 
 
-select COUNT(typesurveillance)
+select COUNT(typesurveillance), typesurveillance, incarceration
 from delinquants
-where typesurveillance = "sl";
--- combien de délinquants sont en semi-liberté
+where incarceration = "surveillance"
+group by typesurveillance;
+-- types de surveillance pour les délinquants en surveillance 
 
-select COUNT(typesurveillance)
-from delinquants
-where typesurveillance = "lct";
--- combien de délinquants sont en libération conditionnelle totale
-
-select COUNT(typesurveillance)
-from delinquants
-where typesurveillance = "lo";
--- combien de délinquants sont en libération d'office
-
-select COUNT(typesurveillance)
-from delinquants
-where typesurveillance = "osld";
--- combien de délinquants sont en ordonnance de surveillance de longue durée 
-
-select COUNT(typesurveillance)
-from delinquants
-where typesurveillance = "ar";
--- combien de délinquants sont en condition d'assignation à résidence 
 
 
 select COUNT(jurisdiction), jurisdiction
@@ -258,43 +271,16 @@ from delinquants
 group by securiteetablissement;
 -- le nombre de délinquants associés à chaque niveau de sécurité d'établissement 
 
-select COUNT(securiteetablissement), groupeethnique
+select COUNT(securiteetablissement), groupeethnique, incarceration 
 from delinquants
-where groupeethnique = "autochtone" and securiteetablissement = "minimale";
+where groupeethnique = "autochtone" and securiteetablissement = "maximale" and incarceration = "incarcere";
+-- Niveau de sécurité des établissements fédéraux pour chaque délinquant incarcéré selon le groupe ethnique 
 
-select COUNT(securiteetablissement), groupeethnique
-from delinquants
-where groupeethnique = "autochtone" and securiteetablissement = "moyenne";
 
-select COUNT(securiteetablissement), groupeethnique
+select COUNT(securiteetablissement), genre, incarceration
 from delinquants
-where groupeethnique = "autochtone" and securiteetablissement = "maximale";
-
-select COUNT(securiteetablissement), groupeethnique
-from delinquants
-where groupeethnique = "autochtone" and securiteetablissement = "niv. multiples";
-
-select COUNT(securiteetablissement), genre
-from delinquants
-where genre = "femme" and securiteetablissement = "minimale";
-
-select COUNT(securiteetablissement), genre
-from delinquants
-where genre = "femme" and securiteetablissement = "moyenne";
-
-select COUNT(securiteetablissement), genre
-from delinquants
-where genre = "femme" and securiteetablissement = "maximale";
-
-select COUNT(securiteetablissement), genre
-from delinquants
-where genre = "femme" and securiteetablissement = "niv. multiples";
-
-select genre, securiteetablissement
-from delinquants
-where genre = "femme"
-order by securiteetablissement;
--- Je réalise ici que seulement 615 femmes sur 1123 ont un niveau de sécurité d'établissement associé. 631 sont incarcérées (voir plus haut)
+where genre = "femme" and securiteetablissement = "niv. multiples" and incarceration = "incarcere";
+-- Niveau de sécurité des établissements fédéraux pour chaque délinquant incarcéré selon le genre 
 
 
 select COUNT(province), province
@@ -337,22 +323,30 @@ group by emplacement;
 -- type d'installation selon les personnes autchotones
 
 
-select COUNT(besoindynamique), besoindynamique
+select COUNT(besoindynamique), besoindynamique, incarceration, genre 
 from delinquants
+where incarceration = "incarcere" and genre = "femme"
 group by besoindynamique;
--- bsoin d'intervention pour chaque délinquant
+-- bsoin d'intervention pour chaque délinquant selon le genre
 
-
-select COUNT(securitedelinquant), securitedelinquant
+select COUNT(besoindynamique), besoindynamique, incarceration, groupeethnique  
 from delinquants
-group by securitedelinquant;
--- cote de sécurité pour chaque délinquant
+where incarceration = "incarcere" and groupeethnique = "non autochtone"
+group by besoindynamique;
+-- bsoin d'intervention pour chaque délinquant selon le groupe ethnique 
 
-select COUNT(securitedelinquant), securitedelinquant, groupeethnique
+
+select COUNT(securitedelinquant), securitedelinquant, genre, incarceration  
 from delinquants
-where groupeethnique = "autochtone"
+where genre = "femme" and incarceration = "incarcere"
 group by securitedelinquant;
--- cote de sécurité selon le groupe ethnique (j'ai essayé aussi pour les femmes et les hommes)
+-- cote de sécurité pour chaque délinquant selon le genre 
+
+select COUNT(securitedelinquant), securitedelinquant, groupeethnique, incarceration 
+from delinquants
+where groupeethnique = "non autochtone" and incarceration = "incarcere"
+group by securitedelinquant;
+-- cote de sécurité pour chaque délinquant selon le groupe ethnique 
 
 select COUNT(securitedelinquant), securitedelinquant, ethnicite
 from delinquants
@@ -366,15 +360,15 @@ from delinquants
 group by risquestatique;
 -- le niveau de risque de chaque délinquant
 
-select risquestatique, COUNT(risquestatique), genre 
+select risquestatique, COUNT(risquestatique), genre, incarceration
 from delinquants
-where genre = "homme"
+where genre = "homme" and incarceration = "incarcere"
 group by risquestatique;
 -- le niveau de risque selon le genre
 
-select risquestatique, COUNT(risquestatique), groupeethnique
+select risquestatique, COUNT(risquestatique), groupeethnique, incarceration 
 from delinquants
-where groupeethnique = "autochtone"
+where groupeethnique = "non autochtone" and incarceration = "incarcere"
 group by risquestatique;
 -- le niveau de risque selon le groupeethnique
 
@@ -383,22 +377,29 @@ from delinquants
 group by potentielreinsertion;
 -- le niveau de potentialité de réinsertion sociale pour chaque délinquant
 
-select COUNT(potentielreinsertion), potentielreinsertion, genre
+select COUNT(potentielreinsertion), potentielreinsertion, genre, incarceration 
 from delinquants
-where genre = "homme"
+where genre = "homme" and incarceration = "incarcere"
 group by potentielreinsertion;
 -- la possibilité de réinsertion sociale selon le genre
 
-select COUNT(potentielreinsertion), potentielreinsertion, groupeethnique
+select COUNT(potentielreinsertion), potentielreinsertion, groupeethnique, incarceration 
 from delinquants
-where groupeethnique = "autochtone"
+where groupeethnique = "non autochtone" and incarceration = "incarcere"
 group by potentielreinsertion;
 -- la possibilité de réinsertion sociale selon le groupeethnique
 
-select COUNT(niveaumotivation), niveaumotivation
+select COUNT(niveaumotivation), niveaumotivation, genre, incarceration  
 from delinquants
+where genre = "homme" and incarceration = "incarcere"
 group by niveaumotivation;
--- niveau de motivation de chaque délinquant par rapport à son plan correctionnel
+-- niveau de motivation de chaque délinquant selon son genre par rapport à son plan correctionnel
+
+select COUNT(niveaumotivation), niveaumotivation, groupeethnique, incarceration 
+from delinquants
+where groupeethnique = "non autochtone" and incarceration = "incarcere"
+group by niveaumotivation;
+-- niveau de motivation de chaque délinquant selon le groupe ethnique 
 
 
 select COUNT(infraction), infraction
